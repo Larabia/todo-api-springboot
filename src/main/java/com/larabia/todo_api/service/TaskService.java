@@ -6,10 +6,15 @@ import com.larabia.todo_api.dto.TaskRequest;
 import com.larabia.todo_api.entity.Task;
 import com.larabia.todo_api.exception.BusinessException;
 import com.larabia.todo_api.repository.TaskRepository;
+import com.larabia.todo_api.specification.TaskSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -89,5 +94,15 @@ public class TaskService {
     public Task getTaskById(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
+    }
+
+
+    public Page<Task> getFilteredTasks(Boolean completed, LocalDate dueDateFrom, LocalDate dueDateTo, Pageable pageable) {
+        Specification<Task> spec = Specification
+                .where(TaskSpecification.hasCompleted(completed))
+                .and(TaskSpecification.hasDueDateFrom(dueDateFrom))
+                .and(TaskSpecification.hasDueDateTo(dueDateTo));
+
+        return taskRepository.findAll(spec, pageable);
     }
 }
