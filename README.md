@@ -37,6 +37,9 @@ com.larabia.todo_api
 ### 🔹 `GET /api/tasks`
 Returns all tasks.
 
+### 🔹 `GET /api/tasks/{id}`
+Returns a task by its ID.
+
 ### 🔹 `POST /api/tasks`
 Creates a new task.
 
@@ -66,6 +69,9 @@ Partially updates title and/or dueDate.
   "dueDate": "2025-06-10"
 }
 ```
+
+### 🔹 `DELETE /api/tasks/{id}`
+Deletes a task by its ID.
 
 ---
 
