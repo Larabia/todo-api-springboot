@@ -78,4 +78,16 @@ public class TaskService {
 
         return taskRepository.save(task);
     }
+
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
+
+        taskRepository.delete(task);
+    }
+
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
+    }
 }
