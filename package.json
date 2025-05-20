@@ -1,0 +1,12 @@
+{
+  "name": "todo-api",
+  "version": "1.0.0",
+  "description": "RESTful Task Management API built with Java and Spring Boot. Includes validation, pagination, error handling and integration tests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
