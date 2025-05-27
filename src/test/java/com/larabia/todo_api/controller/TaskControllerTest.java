@@ -76,7 +76,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long taskId = objectMapper.readTree(response).get("id").asLong(); //Usa el ObjectMapper de Jackson para parsear un String JSON a un árbol de nodos (JsonNode).
+        long taskId = objectMapper.readTree(response).get("id").asLong(); //Usa el ObjectMapper de Jackson para parsear un String JSON a un árbol de nodos (JsonNode).
 
         mockMvc.perform(get("/api/tasks/" + taskId))
                 .andExpect(status().isOk())
@@ -105,7 +105,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long taskId = objectMapper.readTree(response).get("id").asLong();
+        long taskId = objectMapper.readTree(response).get("id").asLong();
 
         mockMvc.perform(delete("/api/tasks/" + taskId))
                 .andExpect(status().isNoContent());
@@ -126,7 +126,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long id = objectMapper.readTree(response).get("id").asLong();
+        long id = objectMapper.readTree(response).get("id").asLong();
 
         mockMvc.perform(patch("/api/tasks/" + id + "/complete"))
                 .andExpect(status().isOk())
@@ -148,7 +148,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long id = objectMapper.readTree(response).get("id").asLong();
+        long id = objectMapper.readTree(response).get("id").asLong();
 
         // Actualización parcial inválida
         TaskPartialUpdateRequest invalidUpdate = new TaskPartialUpdateRequest("", LocalDate.of(2020, 1, 1));
@@ -177,7 +177,7 @@ public class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long id = objectMapper.readTree(response).get("id").asLong();
+        long id = objectMapper.readTree(response).get("id").asLong();
 
         // Marcar como completada
         mockMvc.perform(patch("/api/tasks/" + id + "/complete"))
