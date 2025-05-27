@@ -29,9 +29,9 @@ public class TaskService {
 
     public Task createTask(TaskRequest request) {
         Task task = Task.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .dueDate(request.getDueDate())
+                .title(request.title())
+                .description(request.description())
+                .dueDate(request.dueDate())
                 .completed(false) // default
                 .build();
 
@@ -46,9 +46,9 @@ public class TaskService {
             throw new BusinessException("Completed tasks cannot be edited.");
         }
 
-        existing.setTitle(request.getTitle());
-        existing.setDescription(request.getDescription());
-        existing.setDueDate(request.getDueDate());
+        existing.setTitle(request.title());
+        existing.setDescription(request.description());
+        existing.setDueDate(request.dueDate());
 
         return taskRepository.save(existing);
     }
@@ -73,12 +73,12 @@ public class TaskService {
             throw new BusinessException("Cannot modify a completed task.");
         }
 
-        if (request.getTitle() != null) {
-            task.setTitle(request.getTitle());
+        if (request.title() != null) {
+            task.setTitle(request.title());
         }
 
-        if (request.getDueDate() != null) {
-            task.setDueDate(request.getDueDate());
+        if (request.dueDate() != null) {
+            task.setDueDate(request.dueDate());
         }
 
         return taskRepository.save(task);

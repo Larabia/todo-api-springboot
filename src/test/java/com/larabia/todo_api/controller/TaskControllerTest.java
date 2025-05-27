@@ -29,10 +29,11 @@ public class TaskControllerTest {
 
     @Test
     void shouldCreateTaskSuccessfully() throws Exception {
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Tarea de integración");
-        request.setDescription("Test con MockMvc");
-        request.setDueDate(LocalDate.of(2025, 6, 10));
+        TaskRequest request = new TaskRequest(
+                "Tarea de integración",
+                "Test con MockMvc",
+                LocalDate.of(2025, 6, 10)
+        );
 
         mockMvc.perform(post("/api/tasks") //herramienta de Spring que simula un cliente HTTP.
                         .contentType(MediaType.APPLICATION_JSON) //informa que va a enviar un json Content-Type: application/json
@@ -44,10 +45,12 @@ public class TaskControllerTest {
 
     @Test
     void shouldReturnBadRequestWhenTitleIsMissing() throws Exception {
-        TaskRequest request = new TaskRequest();
-        request.setTitle("");  // Inválido por @NotBlank
-        request.setDueDate(LocalDate.of(2023, 1, 1));  // Inválido por @FutureOrPresent
-        request.setDescription("Descripción de prueba");
+
+        TaskRequest request = new TaskRequest(
+                "",
+                "Descripción de prueba",
+                LocalDate.of(2023, 1, 1)
+        );
 
         mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,9 +64,11 @@ public class TaskControllerTest {
     @Test
     void shouldGetTaskById() throws Exception {
         // Crear tarea para obtenerla luego
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Consulta por ID");
-        request.setDueDate(LocalDate.now().plusDays(1));
+        TaskRequest request = new TaskRequest(
+                "Consulta por ID",
+                null,
+                LocalDate.now().plusDays(1)
+        );
 
         String response = mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,9 +92,12 @@ public class TaskControllerTest {
 
     @Test
     void shouldDeleteTaskSuccessfully() throws Exception {
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Tarea para eliminar");
-        request.setDueDate(LocalDate.now().plusDays(1));
+
+        TaskRequest request = new TaskRequest(
+                "Tarea para eliminar",
+                null,
+                LocalDate.now().plusDays(1)
+        );
 
         String response = mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,9 +114,11 @@ public class TaskControllerTest {
     @Test
     void shouldMarkTaskAsCompleted() throws Exception {
         // Crear tarea primero
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Tarea a completar");
-        request.setDueDate(LocalDate.now().plusDays(1));
+        TaskRequest request = new TaskRequest(
+                "Tarea a completar",
+                null,
+                LocalDate.now().plusDays(1)
+        );
 
         String response = mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -126,9 +136,11 @@ public class TaskControllerTest {
     @Test
     void shouldReturnBadRequestOnInvalidPartialUpdate() throws Exception {
         // Crear tarea válida
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Tarea a actualizar");
-        request.setDueDate(LocalDate.now().plusDays(1));
+        TaskRequest request = new TaskRequest(
+                "Tarea a actualizar",
+                null,
+                LocalDate.now().plusDays(1)
+        );
 
         String response = mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,9 +151,7 @@ public class TaskControllerTest {
         Long id = objectMapper.readTree(response).get("id").asLong();
 
         // Actualización parcial inválida
-        TaskPartialUpdateRequest invalidUpdate = new TaskPartialUpdateRequest();
-        invalidUpdate.setTitle("");
-        invalidUpdate.setDueDate(LocalDate.of(2020, 1, 1));
+        TaskPartialUpdateRequest invalidUpdate = new TaskPartialUpdateRequest("", LocalDate.of(2020, 1, 1));
 
         mockMvc.perform(patch("/api/tasks/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -155,9 +165,11 @@ public class TaskControllerTest {
     @Test
     void shouldFilterTasksByCompletedStatus() throws Exception {
         // Crear tarea completada
-        TaskRequest request = new TaskRequest();
-        request.setTitle("Tarea completada");
-        request.setDueDate(LocalDate.now().plusDays(1));
+        TaskRequest request = new TaskRequest(
+                "Tarea completada",
+                null,
+                LocalDate.now().plusDays(1)
+        );
 
         String response = mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
