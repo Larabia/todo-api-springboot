@@ -188,4 +188,46 @@ public class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[*].id").isNotEmpty());
     }
+
+    @Test
+    void shouldGroupTasksByCompletion() throws Exception {
+        // Crear tareas: una completada y una no completada
+        TaskRequest task1 = new TaskRequest(
+                "Tarea completada",
+                "Para agrupar",
+                LocalDate.now().plusDays(1)
+        );
+
+        String response1 = mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(task1)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        long id1 = objectMapper.readTree(response1).get("id").asLong();
+
+        // Marcarla como completada
+        mockMvc.perform(patch("/api/tasks/" + id1 + "/complete"))
+                .andExpect(status().isOk());
+
+        // Crear otra tarea no completada
+        TaskRequest task2 = new TaskRequest(
+                "Tarea no completada",
+                "Para agrupar también",
+                LocalDate.now().plusDays(1)
+        );
+
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(task2)))
+                .andExpect(status().isCreated());
+
+        // Llamar al nuevo endpoint de agrupación
+        mockMvc.perform(get("/api/tasks/grouped-by-completion"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.true").isArray())
+                .andExpect(jsonPath("$.false").isArray())
+                .andExpect(jsonPath("$.true[0].title").value("Tarea completada"))
+                .andExpect(jsonPath("$.false[0].title").value("Tarea no completada"));
+    }
 }

@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -104,5 +106,12 @@ public class TaskService {
                 .and(TaskSpecification.hasDueDateTo(dueDateTo));
 
         return taskRepository.findAll(spec, pageable);
+    }
+
+    public Map<Boolean, List<Task>> getTasksGroupedByCompletion() {
+        List<Task> allTasks = taskRepository.findAll();
+
+        return allTasks.stream()
+                .collect(Collectors.groupingBy(Task::isCompleted));
     }
 }

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -71,6 +73,11 @@ public class TaskController {
         Pageable pageable = PageRequest.of(page, size);
         Page<Task> result = taskService.getFilteredTasks(completed, dueDateFrom, dueDateTo, pageable);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/grouped-by-completion")
+    public Map<Boolean, List<Task>> getTasksGroupedByCompletion() {
+        return taskService.getTasksGroupedByCompletion();
     }
 
 }
